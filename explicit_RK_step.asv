@@ -20,6 +20,9 @@
     % sum_val1 = K*(A(i,:)');
     % sum_val2 = K*B;
 
+    % s = number of stages (how many k_i values you calculate
+    % b_i = weights telling how much each slope k_i contributes to the final update
+
 function [XB, num_evals] = explicit_RK_step(rate_func_in,t,XA,h,BT_struct)
     
     % The tableau
@@ -35,16 +38,17 @@ function [XB, num_evals] = explicit_RK_step(rate_func_in,t,XA,h,BT_struct)
  
         sum_val1 = K * A(i,:)'; % Computes the weighted sum
         
+
         K(:, i) = rate_func_in(t + C(i)*h, XA + h*sum_val1); % rate function
     end
 
+    sum_val2 = K*B;
+    
 %     X_mid = XA + h/2*rate_func_in(t, XA); % midpoint estimate  
 %     XB  = XA +  h*rate_func_in(t  + h/2, X_mid); % Uses midpoints slope 
   
-    % Combine all k_i’s to compute X_{n+1}
-    XB = XA + h * (K * B'); % uses B vector as they are th slope values in matrix
+    % Combine all k_i to get X_n+1
+    XB = XA + h * (K * B'); % uses B vector as they are the slope values
     num_evals = s;
-
-
 
 end

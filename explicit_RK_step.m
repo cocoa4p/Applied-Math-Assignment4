@@ -38,9 +38,12 @@ function [XB, num_evals] = explicit_RK_step(rate_func_in,t,XA,h,BT_struct)
  
         sum_val1 = K * A(i,:)'; % Computes the weighted sum
         
+
         K(:, i) = rate_func_in(t + C(i)*h, XA + h*sum_val1); % rate function
     end
 
+    sum_val2 = K*B;
+    
 %     X_mid = XA + h/2*rate_func_in(t, XA); % midpoint estimate  
 %     XB  = XA +  h*rate_func_in(t  + h/2, X_mid); % Uses midpoints slope 
   
