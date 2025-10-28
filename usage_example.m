@@ -11,7 +11,7 @@ function usage_example()
     dxdt0 = 0;
     dydt0 = 1.5;
     
-    V0 = [x0;y0;dxdt0;dydt0];
+    V0 = [x0; y0; dxdt0;dydt0];
     tspan = [0,30];
     t_range = linspace(tspan(1),tspan(2),100);
     V_list = compute_planetary_motion(t_range,V0,orbit_params);

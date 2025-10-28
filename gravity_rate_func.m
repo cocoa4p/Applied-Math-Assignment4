@@ -13,9 +13,8 @@
 % dVdt = [dxdt_p; dydt_p; d2xdt2_p; d2ydt2_p]
 function dVdt = gravity_rate_func(t,V,orbit_params)
     
-    r = [x;y];
-
     x = V(1); y = V(2); vx = V(3); vy = V(4);
+    r = [x;y];
 
 %   r_mag = sqrt(x^2 + y^2);
     r_mag = norm(r);
