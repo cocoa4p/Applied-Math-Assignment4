@@ -48,7 +48,7 @@ function [XB, num_evals] = explicit_RK_step(rate_func_in,t,XA,h,BT_struct)
 %     XB  = XA +  h*rate_func_in(t  + h/2, X_mid); % Uses midpoints slope 
   
     % Combine all k_i to get X_n+1
-    XB = XA + h * (K * B'); % uses B vector as they are the slope values
+    XB = XA + h * (K * B(:,1)'); % uses B vector as they are the slope values
     num_evals = s;
 
 end
