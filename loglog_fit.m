@@ -14,7 +14,6 @@
 %OUTPUTS:
 %[p,k]: the regressed values for relationship y = k*x^p
 
-% % SEE VIDEO
 % filter_params = struct();
 % filter_params.min_yval = 1e-10;
 % filter_params.min_xval = 1;

@@ -20,7 +20,13 @@ function usage_example()
 
     DormandPrince = struct();
     DormandPrince.C = [0, 1/5, 3/10, 4/5, 8/9, 1, 1];
-    DormandPrince.B = [5179/57600, 0, 7571/16695, 393/640, -92097/339200, 187/2100, 1/40];
+    
+    % DormandPrince.B = [5179/57600, 0, 7571/16695, 393/640, -92097/339200, 187/2100, 1/40];
+
+    DormandPrince.B = [35/384, 0, 500/1113, 125/192, -2187/6784, 11/84, 0;...
+5179/57600, 0, 7571/16695, 393/640, -92097/339200, 187/2100, 1/40];
+
+
     DormandPrince.A = [0,0,0,0,0,0,0;
                         1/5, 0, 0, 0,0,0,0;...
                         3/40, 9/40, 0, 0, 0, 0,0;...
@@ -29,7 +35,7 @@ function usage_example()
                         9017/3168, -355/33, 46732/5247, 49/176, -5103/18656, 0,0;...
                         35/384, 0, 500/1113, 125/192, -2187/6784, 11/84,0];
 
-    h_ref = 0.05;
+    h_ref = 0.01;
     [t_list, X_list, h_avg, num_evals] = explicit_RK_fixed_step_integration(my_rate, tspan, V0, h_ref, DormandPrince);
     
   
@@ -56,7 +62,8 @@ function usage_example()
     xlabel('time');
     ylabel('velocity component');
  
-    % local truncation error for embedded
+    % LOCAL truncation error for embedded -------------------------------
+
     n_samples = 60;
     h_ref_list = logspace(-3, 1, n_samples);
     abs_diff_list = zeros(1,n_samples);
@@ -87,16 +94,16 @@ function usage_example()
     p2
 
     figure(2);
-    loglog(h_ref_list, abs_diff_list, 'ro', MarkerFaceColor', 'r', 'MarkerSize', 2);
+    loglog(h_ref_list, abs_diff_list, 'ro', 'MarkerFaceColor', 'r', 'MarkerSize', 2);
     hold on
-    loglog(h_ref_list, tr_error_list1, 'bo', MarkerFaceColor', 'b', 'MarkerSize', 2);
-    loglog(h_ref_list, tr_error_list2, 'go', MarkerFaceColor', 'g', 'MarkerSize', 2);
+    loglog(h_ref_list, tr_error_list1, 'bo', 'MarkerFaceColor', 'b', 'MarkerSize', 2);
+    loglog(h_ref_list, tr_error_list2, 'go', 'MarkerFaceColor', 'g', 'MarkerSize', 2);
 
 
-    loglog(h_ref_list, k1*num_evals_list.^p1, 'k--', 'LineWidth',1.5);
-    loglog(h_ref_list, k2*num_evals_list.^p2, 'b--', 'LineWidth',1.5);
+    loglog(h_ref_list, k1*num_evals.^p1, 'k--', 'LineWidth',1.5);
+    loglog(h_ref_list, k2*num_evals.^p2, 'b--', 'LineWidth',1.5);
 
-%     Global truncation error 
+%     GLOBAL truncation error -----------------------------------------
 
 %     n_samples = 30;
 %     h_ref_list = logspace(-3.3, 1, n_samples);

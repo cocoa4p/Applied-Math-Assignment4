@@ -16,7 +16,7 @@
 %num_evals: A count of the number of times that you called
 % rate_func_in when computing the next step
 function [XB1, XB2, num_evals] = RK_step_embedded(rate_func_in,t,XA,h,BT_struct)
-      % The tableau
+
     A = BT_struct.A;
     B = BT_struct.B;
     C = BT_struct.C;
@@ -28,18 +28,12 @@ function [XB1, XB2, num_evals] = RK_step_embedded(rate_func_in,t,XA,h,BT_struct)
     for i = 1:s
  
         sum_val1 = K * A(i,:)'; % Computes the weighted sum
-        
-
         K(:, i) = rate_func_in(t + C(i)*h, XA + h*sum_val1); % rate function
     end
 
-    %sum_val2 = K*B;
-    
-%     X_mid = XA + h/2*rate_func_in(t, XA); % midpoint estimate  
-%     XB  = XA +  h*rate_func_in(t  + h/2, X_mid); % Uses midpoints slope 
-  
     % Combine all k_i to get X_n+1
     XB1 = XA + h * (K * B(1,:)'); % uses B vector as they are the slope values
     XB2 = XA + h * (K * B(2,:)'); % uses B vector as they are the slope values
     num_evals = s;
 end
+
