@@ -16,7 +16,12 @@
 %num_evals: A count of the number of times that you called
 % rate_func_in when computing the next step
 function [XB1, XB2, num_evals] = RK_step_embedded(rate_func_in,t,XA,h,BT_struct)
+<<<<<<< Updated upstream
 
+=======
+        
+    % The tableau
+>>>>>>> Stashed changes
     A = BT_struct.A;
     B = BT_struct.B;
     C = BT_struct.C;
@@ -28,6 +33,7 @@ function [XB1, XB2, num_evals] = RK_step_embedded(rate_func_in,t,XA,h,BT_struct)
     for i = 1:s
  
         sum_val1 = K * A(i,:)'; % Computes the weighted sum
+<<<<<<< Updated upstream
         K(:, i) = rate_func_in(t + C(i)*h, XA + h*sum_val1); % rate function
     end
 
@@ -37,3 +43,15 @@ function [XB1, XB2, num_evals] = RK_step_embedded(rate_func_in,t,XA,h,BT_struct)
     num_evals = s;
 end
 
+=======
+        
+
+        K(:, i) = rate_func_in(t + C(i)*h, XA + h*sum_val1); % rate function
+    end
+
+
+    XB = XA + h * (K * B(1,:)'); % uses B vector as they are the slope values
+    num_evals = s;
+
+end
+>>>>>>> Stashed changes

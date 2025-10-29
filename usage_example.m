@@ -35,7 +35,7 @@ function usage_example()
                         9017/3168, -355/33, 46732/5247, 49/176, -5103/18656, 0,0;...
                         35/384, 0, 500/1113, 125/192, -2187/6784, 11/84,0];
 
-    h_ref = 0.01;
+    h_ref = 0.05;
     [t_list, X_list, h_avg, num_evals] = explicit_RK_fixed_step_integration(my_rate, tspan, V0, h_ref, DormandPrince);
     
   
@@ -61,9 +61,8 @@ function usage_example()
 
     xlabel('time');
     ylabel('velocity component');
- 
-    % LOCAL truncation error for embedded -------------------------------
 
+    % LOCAL TRUNCATION
     n_samples = 60;
     h_ref_list = logspace(-3, 1, n_samples);
     abs_diff_list = zeros(1,n_samples);
@@ -94,6 +93,7 @@ function usage_example()
     p2
 
     figure(2);
+
     loglog(h_ref_list, abs_diff_list, 'ro', 'MarkerFaceColor', 'r', 'MarkerSize', 2);
     hold on
     loglog(h_ref_list, tr_error_list1, 'bo', 'MarkerFaceColor', 'b', 'MarkerSize', 2);
