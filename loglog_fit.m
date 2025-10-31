@@ -14,13 +14,6 @@
 %OUTPUTS:
 %[p,k]: the regressed values for relationship y = k*x^p
 
-<<<<<<< Updated upstream
-=======
-
->>>>>>> Stashed changes
-% filter_params = struct();
-% filter_params.min_yval = 1e-10;
-% filter_params.min_xval = 1;
 
 function [p,k] = loglog_fit(x_regression,y_regression,varargin)
     

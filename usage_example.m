@@ -62,7 +62,6 @@ function usage_example()
     xlabel('time');
     ylabel('velocity component');
 
-    % LOCAL TRUNCATION
     n_samples = 60;
     h_ref_list = logspace(-3, 1, n_samples);
     abs_diff_list = zeros(1,n_samples);
@@ -104,6 +103,17 @@ function usage_example()
     loglog(h_ref_list, k2*num_evals.^p2, 'b--', 'LineWidth',1.5);
 
 %     GLOBAL truncation error -----------------------------------------
+
+    loglog(h_ref_list, abs_diff_list, 'ro', MarkerFaceColor', 'r', 'MarkerSize', 2);
+    hold on
+    loglog(h_ref_list, tr_error_list1, 'bo', MarkerFaceColor', 'b', 'MarkerSize', 2);
+    loglog(h_ref_list, tr_error_list2, 'go', MarkerFaceColor', 'g', 'MarkerSize', 2);
+
+
+    loglog(h_ref_list, k1*num_evals_list.^p1, 'k--', 'LineWidth',1.5);
+    loglog(h_ref_list, k2*num_evals_list.^p2, 'b--', 'LineWidth',1.5);
+
+%     Global truncation error 
 
 %     n_samples = 30;
 %     h_ref_list = logspace(-3.3, 1, n_samples);
