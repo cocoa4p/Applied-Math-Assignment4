@@ -30,7 +30,7 @@ function [t_list,X_list,h_avg, num_evals] = explicit_RK_fixed_step_integration(r
          % at each time step, we compute value at next time step
         [XB, num_evals_temp] = explicit_RK_step(rate_func_in, t_list(m),X_list(m,:)', h_avg, BT_struct);
         num_evals = num_evals + num_evals_temp;
-        X_list(m+1,:) = XB';
+        X_list(m+1, :) = XB';
 
     end
 
