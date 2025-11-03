@@ -1,4 +1,4 @@
-function dayOne_explicitMethods()
+function dayTwo_Global()
     orbit_params = struct();
     orbit_params.m_sun = 1;
     orbit_params.m_planet = 1;
@@ -62,71 +62,6 @@ function dayOne_explicitMethods()
     h_ref = 0.05;
     [t_list, X_list, h_avg, num_evals] = explicit_RK_fixed_step_integration(my_rate, tspan, V0, h_ref, expMethod);
     
-%     
-%     subplot(2,1,1);
-%     hold on;
-%     plot(t_range, V_list(:, 1), 'k', 'linewidth',2);
-%     plot(t_range, V_list(:, 2), 'b', 'linewidth', 2);
-% 
-%     plot(t_list, X_list(:,1),'r--', 'linewidth', 2);
-%     plot(t_list, X_list(:,2),'r--', 'linewidth', 2);
-%     xlabel('time');
-%     ylabel('position component');
-% 
-%     subplot(2,1,2);
-%     hold on;
-%     plot(t_range, V_list(:, 3), 'k', 'linewidth',2);
-%     plot(t_range, V_list(:, 4), 'b', 'linewidth', 2);
-%     
-%     plot(t_list, X_list(:,3),'r--', 'linewidth', 2);
-%     plot(t_list, X_list(:,4),'r--', 'linewidth', 2);
-%     xlabel('time');
-%     ylabel('velocity component');
-
-%     n_samples = 60;
-%     h_ref_list = logspace(-3, 1, n_samples);
-%     abs_diff_list = zeros(1,n_samples);
-% 
-%     tr_error_list = zeros(1,n_samples);
-% %     tr_error_list1 = zeros(1,n_samples);
-% %     tr_error_list2 = zeros(1,n_samples);
-% 
-%     for n = 1:length(h_ref_list)
-%         h_ref = h_ref_list(n);
-%         V_list = compute_planetary_motion(tspan(1)+h_ref,V0,orbit_params);
-%         
-%         % EXPLICIT RK STEP
-%         % Previously RK_step_embedded (rate_func_in,t,XA,h,BT_struct)
-% 
-%         [XB, num_evals] = explicit_RK_step(my_rate, tspan(1), V0, h_ref, expMethod);
-%         
-%         abs_diff_list(n) = norm(V_list - V0);
-%         tr_error_list(n) = norm(XB - V_list);
-% 
-%     
-%     end
-% 
-%     filter_params = struct();
-%     filter_params.min_yval = 1e-12;
-%     filter_params.max_yval = 1e-6;
-% 
-%     [p1,k1] = loglog_fit(h_ref_list, tr_error_list, filter_params);
-%    
-%     p1
-% 
-%     figure(2);
-% 
-%     loglog(h_ref_list, abs_diff_list, 'ro', 'MarkerFaceColor', 'r', 'MarkerSize', 4);
-%     hold on
-%     loglog(h_ref_list, tr_error_list, 'bo', 'MarkerFaceColor', 'b', 'MarkerSize', 4);
-% 
-%     loglog(h_ref_list, k1*h_ref_list.^p1, 'm', 'LineWidth',1.5);
-% 
-%     title('Scaling of Local Truncation Error with Step Size')
-%     xlabel('Step size, h')
-%     ylabel('Error magnitude')
-%     legend('|X(t+h) - X(t)| true change','Local truncation error', 'Fit Line');
-
 
 % GLOBAL ERROR -------------------------
     n_samples = 30;
