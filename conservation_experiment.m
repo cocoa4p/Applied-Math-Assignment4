@@ -17,7 +17,7 @@ function conservation_experiment()
     t0 = 0;
     tf = 10;
      
-    rate = @gravity_rate_func;
+    rate = @(t, V) gravity_rate_func(t, V, orbit_params);
 
    % X0 = sol(t0);  
    % X_true = sol(tf);   
@@ -56,7 +56,6 @@ function conservation_experiment()
 
     % Plot energy conservation vs step size
     figure(1); clf
-
     loglog(h_step, errs_FE,  'ro', 'MarkerFaceColor','r', 'MarkerSize',2); hold on
 
     %filter_params = struct();
@@ -65,9 +64,8 @@ function conservation_experiment()
    % [p_FE, k_FE]   = loglog_fit(h_step, errs_FE, filter_params);
    % yline(E_ref)
 
-    loglog(h_step, k_FE*h_step.^p_FE, 'r-', 'LineWidth', 1);
-
-    legend(sprintf('Forward Euler (p = %.4f)', p_FE), sprintf('Midpoint (p = %.4f)', p_Mid))
+    %loglog(h_step, k_FE*h_step.^p_FE, 'r-', 'LineWidth', 1);
+    
     xlabel('step size h');
     ylabel('Max relative energy error');
     title('Energy Conservation vs Step Size (Forward Euler)');
@@ -76,6 +74,7 @@ function conservation_experiment()
     filter_params = struct();
     filter_params.max_xval = 1;
     [p_FE, k_FE] = loglog_fit(h_step, errs_FE, filter_params);
+
     loglog(h_step, k_FE*h_step.^p_FE, 'r--', 'LineWidth', 1);
     legend(sprintf('Forward Euler (p = %.2f)', p_FE), 'Location','southwest');
 end
