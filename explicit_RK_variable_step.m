@@ -22,8 +22,11 @@
 %h_next: the time-step size at the next iteration
 %redo: False if the estimated error was less than error_desired
 % True if the estimated error was larger than error_desired
-function [XB, num_evals, h_next, redo] = explicit_RK_variable_step...
+function [XB, num_evals, h_next, redo, fail_rate] = explicit_RK_variable_step...
 (rate_func_in,t,XA,h,BT_struct,p,error_desired)
+
+    failed = 0;
+    attempted_steps = 0;
 
     [XB1, XB2, num_evals] = RK_step_embedded(rate_func_in,t,XA,h,BT_struct);
     XB = XB1;
@@ -32,7 +35,15 @@ function [XB, num_evals, h_next, redo] = explicit_RK_variable_step...
 
     redo = error_approx > error_desired;
 
+    if redo == true
+        failed = failed + 1;
+    end
+
     a = 2;
 
     h_next = min(.9*(error_desired/error_approx)^(1/p),a)*h;
+
+    attempted_steps = attempted_steps + 1;
+
+    fail_rate = failed/attempted_steps;
 end

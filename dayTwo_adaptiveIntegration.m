@@ -4,21 +4,21 @@ function dayTwo_adaptiveIntegration()
     orbit_params = struct();
     orbit_params.m_sun = 1;
     orbit_params.m_planet = 1;
-    orbit_params.G = 30;
+    orbit_params.G = 50;
 
     % Initial conditions (elliptical orbit)
 
     x0 = 10;
     y0 = 0;
     dxdt0 = 0;
-    dydt0 = 1.2;   % smaller tangential velocity
+    dydt0 = 3;   % smaller tangential velocity
 
 
 %     x0 = 8;  y0 = 0;
 %     dxdt0 = 0;  dydt0 = 1.5;
     V0 = [x0; y0; dxdt0; dydt0];
 
-    tspan = [0, 30];
+    tspan = [0, 400];
     t_range = linspace(tspan(1), tspan(2), 500);
     V_true = compute_planetary_motion(t_range, V0, orbit_params);
 
@@ -95,7 +95,8 @@ function dayTwo_adaptiveIntegration()
     legend('Location', 'best');
     title('Global Error vs. Average Step Size');
 
-    figure(2); clf;
+    
+    figure(2); clf; 
     loglog(num_eval_fixed, global_error_fixed, 'bo-', 'LineWidth', 1.5, 'DisplayName', 'Fixed step');
     hold on;
     loglog(num_eval_adapt, global_error_adapt, 'ro-', 'LineWidth', 1.5, 'DisplayName', 'Adaptive step');
@@ -106,11 +107,16 @@ function dayTwo_adaptiveIntegration()
 
 
     figure(3); clf;
+    
     [t_list, X_list, ~, ~] = explicit_RK_variable_step_integration( ...
         my_rate, tspan, V0, 0.05, DormandPrince_embedded, p, 1e-5);
     plot(X_list(:,1), X_list(:,2), 'r-', 'LineWidth', 1.5);
     hold on;
     plot(V_true(:,1), V_true(:,2), 'k--', 'LineWidth', 1.2);
+    % xlim([-80 100])
+    % ylim([-80 100])
+    axis equal;
+    plot(0,0,'ro','markerfacecolor','r','markersize',5);
     xlabel('x'); ylabel('y');
     legend('Adaptive RK (Dormand–Prince)', 'True solution');
     title('Planetary Orbit Comparison');

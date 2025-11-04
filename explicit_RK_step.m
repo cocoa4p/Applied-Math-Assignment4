@@ -18,3 +18,4 @@ function [XB, num_evals] = explicit_RK_step(rate_func_in, t, XA, h, BT_struct)
     XB = XA + h * (K * B);
     num_evals = s;
 end
+
