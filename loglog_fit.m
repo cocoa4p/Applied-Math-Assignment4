@@ -73,6 +73,12 @@ function [p,k] = loglog_fit(x_regression,y_regression,varargin)
 
     %run the regression
     coeff_vec = regress(Y,[X1,X2]);
+    X1
+    X2
+    Y
+    size(X1)
+    size(X2)
+    size(Y)
     
     %pull out the coefficients from the fit
     p = coeff_vec(1);

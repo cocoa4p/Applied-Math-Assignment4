@@ -31,7 +31,7 @@ function [XB1, XB2, num_evals] = RK_step_embedded(rate_func_in,t,XA,h,BT_struct)
 
         K(:, i) = rate_func_in(t + C(i)*h, XA + h*sum_val1); % rate function
     end
-
+    
     % Combine all k_i to get X_n+1
     XB1 = XA + h * (K * B(1,:)'); % uses B vector as they are the slope values
     XB2 = XA + h * (K * B(2,:)'); % uses B vector as they are the slope values

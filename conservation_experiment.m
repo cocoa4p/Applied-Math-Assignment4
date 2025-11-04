@@ -65,7 +65,7 @@ function conservation_experiment()
    % yline(E_ref)
 
     %loglog(h_step, k_FE*h_step.^p_FE, 'r-', 'LineWidth', 1);
-    
+
     xlabel('step size h');
     ylabel('Max relative energy error');
     title('Energy Conservation vs Step Size (Forward Euler)');

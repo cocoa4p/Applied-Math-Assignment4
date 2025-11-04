@@ -39,8 +39,8 @@ function dayTwo_Local()
     
     DormandPrince = struct();
     DormandPrince.C = [0, 1/5, 3/10, 4/5, 8/9, 1, 1];
-    % DormandPrince.B = [35/384, 0, 500/1113, 125/192, -2187/6784, 11/84, 0; 5179/57600, 0, 7571/16695, 393/640, -92097/339200, 187/2100, 1/40];
-    DormandPrince.B = [5179/57600, 0, 7571/16695, 393/640, -92097/339200, 187/2100, 1/40];
+    DormandPrince.B = [35/384, 0, 500/1113, 125/192, -2187/6784, 11/84, 0; 5179/57600, 0, 7571/16695, 393/640, -92097/339200, 187/2100, 1/40];
+    % DormandPrince.B = [5179/57600, 0, 7571/16695, 393/640, -92097/339200, 187/2100, 1/40];
     DormandPrince.A = [0,0,0,0,0,0,0;
     1/5, 0, 0, 0,0,0,0;...
     3/40, 9/40, 0, 0, 0, 0,0;...
@@ -60,36 +60,10 @@ function dayTwo_Local()
     expMethod = DormandPrince;
 
     h_ref = 0.05;
-    [t_list, X_list, h_avg, num_evals] = explicit_RK_fixed_step_integration(my_rate, tspan, V0, h_ref, expMethod);
+   % [t_list, X_list, h_avg, num_evals] = explicit_RK_fixed_step_integration(my_rate, tspan, V0, h_ref, expMethod);
     
-    
-    subplot(2,1,1);
-    hold on;
-    plot(t_range, V_list(:, 1), 'k', 'linewidth',2);
-    plot(t_range, V_list(:, 2), 'b', 'linewidth', 2);
+   h_ref_list = logspace(-5, 5, 200);
 
-    plot(t_list, X_list(:,1),'r--', 'linewidth', 2);
-    plot(t_list, X_list(:,2),'r--', 'linewidth', 2);
-    xlabel('time');
-    ylabel('position component');
-
-    subplot(2,1,2);
-    hold on;
-    plot(t_range, V_list(:, 3), 'k', 'linewidth',2);
-    plot(t_range, V_list(:, 4), 'b', 'linewidth', 2);
-    
-    plot(t_list, X_list(:,3),'r--', 'linewidth', 2);
-    plot(t_list, X_list(:,4),'r--', 'linewidth', 2);
-    xlabel('time');
-    ylabel('velocity component');
-
-    n_samples = 60;
-    h_ref_list = logspace(-3, 1, n_samples);
-    abs_diff_list = zeros(1,n_samples);
-
-    tr_error_list = zeros(1,n_samples);
-%     tr_error_list1 = zeros(1,n_samples);
-%     tr_error_list2 = zeros(1,n_samples);
 
     for n = 1:length(h_ref_list)
         h_ref = h_ref_list(n);
@@ -98,11 +72,12 @@ function dayTwo_Local()
         % EXPLICIT RK STEP
         % Previously RK_step_embedded (rate_func_in,t,XA,h,BT_struct)
 
-        [XB, num_evals] = explicit_RK_step(my_rate, tspan(1), V0, h_ref, expMethod);
+        [XB1, XB2 num_evals] = RK_step_embedded(my_rate, tspan(1), V0, h_ref, expMethod);
         
         abs_diff_list(n) = norm(V_list - V0);
-        tr_error_list(n) = norm(XB - V_list);
-
+        tr_error_list1(n) = norm(XB1 - V_list);
+        tr_error_list2(n) = norm(XB2 - V_list);
+        diff_list(n) = norm(XB2 - XB1);
     
     end
 
@@ -110,22 +85,38 @@ function dayTwo_Local()
     filter_params.min_yval = 1e-12;
     filter_params.max_yval = 1e-6;
 
-    [p1,k1] = loglog_fit(h_ref_list, tr_error_list, filter_params);
-   
-    p1
+    %[p1,k1] = loglog_fit(h_ref_list, tr_error_list, filter_params);
 
     figure(2);
-
-    loglog(h_ref_list, abs_diff_list, 'ro', 'MarkerFaceColor', 'r', 'MarkerSize', 4);
+    
+    loglog(h_ref_list, abs_diff_list, 'go', 'MarkerFaceColor', 'g', 'MarkerSize', 2);
     hold on
-    loglog(h_ref_list, tr_error_list, 'bo', 'MarkerFaceColor', 'b', 'MarkerSize', 4);
+    loglog(h_ref_list, tr_error_list1 , 'ro', 'MarkerFaceColor', 'm', 'MarkerSize', 2);
+    
+    loglog(h_ref_list,  tr_error_list2, 'bo', 'MarkerFaceColor', 'b', 'MarkerSize', 2);
 
-    loglog(h_ref_list, k1*h_ref_list.^p1, 'm', 'LineWidth',1.5);
+    loglog(h_ref_list, diff_list, 'mo', 'MarkerFaceColor', 'm', 'MarkerSize', 2);
 
     title('Scaling of Local Truncation Error with Step Size')
     xlabel('Step size, h')
     ylabel('Error magnitude')
-    legend('|X(t+h) - X(t)| true change','Local truncation error', 'Fit Line');
+    my_legend = legend('|X(t+h) - X(t)| true change','Local truncation error XB1', 'Local truncation error XB2', 'Difference of XB1 and XB2');
+    set(my_legend,'location','southeast')
 
+    % XB2-XB1 can be aused as a proxy for the local truncation error of XB2
+    %XB1 is higher order than XB2 so it is more accurate and much closer to
+    %analytical value
+
+    figure(3);
+    
+    loglog(diff_list, tr_error_list1, 'mo', 'MarkerFaceColor', 'm', 'MarkerSize', 2); hold on;
+    loglog(diff_list, tr_error_list2, 'co', 'MarkerFaceColor', 'c', 'MarkerSize', 2);
+
+    title('Scaling of Local Truncation Error with Step Size')
+    xlabel('Difference between XB1 and XB2')
+    ylabel('Error magnitude')
+    my_legend = legend('Local truncation error XB1', 'Local truncation error XB2');
+    set(my_legend,'location','southeast')
+    
 
 end
