@@ -13,6 +13,7 @@ function [XB, num_evals] = explicit_RK_step(rate_func_in, t, XA, h, BT_struct)
         K(:,i) = rate_func_in(t + C(i)*h, XA + h*sum_val1);
     end
 
+   
     % Combine all to get next X value
     XB = XA + h * (K * B);
     num_evals = s;
