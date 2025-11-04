@@ -48,10 +48,11 @@ function dayTwo_adaptiveIntegration()
     DormandPrince_fixed.A = DormandPrince_embedded.A;
     DormandPrince_fixed.B = DormandPrince_embedded.B(2,:);  % choose one row
     
+    
 
-    p = 5; % expected order for Dormand–Prince
+    p = 5; 
 
-    % ------------------ TEST PARAMETERS ------------------
+
     error_desired_list = logspace(-3, -8, 6);  % adaptive target errors
     h_fixed_list = logspace(-2.5, -1, 5);      % fixed step reference sizes
 
@@ -64,18 +65,18 @@ function dayTwo_adaptiveIntegration()
     num_eval_adapt = zeros(size(error_desired_list));
     fail_rate_list = zeros(size(error_desired_list));
 
-    % ------------------ FIXED STEP RUNS ------------------
+
     fprintf('Running fixed-step integrations...\n');
     for i = 1:length(h_fixed_list)
         h = h_fixed_list(i);
-        [t_list, X_list, h_avg, num_evals] = explicit_RK_fixed_step_integration( ...
+        [t_list, X_list, h_avg, num_evals] = explicit_RK_fixed_step_integration_global( ...
             my_rate, tspan, V0, h, DormandPrince_fixed);
         global_error_fixed(i) = norm(X_list(end,:) - V_true(end,:));
         h_avg_fixed(i) = h_avg;
         num_eval_fixed(i) = num_evals;
     end
 
-    % ------------------ ADAPTIVE STEP RUNS ------------------
+
     fprintf('Running adaptive-step integrations...\n');
     for i = 1:length(error_desired_list)
         error_desired = error_desired_list(i);
@@ -85,7 +86,6 @@ function dayTwo_adaptiveIntegration()
         num_eval_adapt(i) = num_evals;
     end
 
-    % ------------------ PLOTS ------------------
     figure(1); clf;
     loglog(h_avg_fixed, global_error_fixed, 'bo-', 'LineWidth', 1.5, 'DisplayName', 'Fixed step');
     hold on;
@@ -104,7 +104,7 @@ function dayTwo_adaptiveIntegration()
     legend('Location', 'best');
     title('Global Error vs. Number of Evaluations');
 
-    % Example orbit plot (for one adaptive run)
+
     figure(3); clf;
     [t_list, X_list, ~, ~] = explicit_RK_variable_step_integration( ...
         my_rate, tspan, V0, 0.05, DormandPrince_embedded, p, 1e-5);
@@ -116,7 +116,7 @@ function dayTwo_adaptiveIntegration()
     title('Planetary Orbit Comparison');
     axis equal;
 
-    % Example step-size clustering visualization
+
     figure(4); clf;
     h_list = diff(t_list);
     r_list = sqrt(sum(X_list(1:end-1,1:2).^2, 2));
