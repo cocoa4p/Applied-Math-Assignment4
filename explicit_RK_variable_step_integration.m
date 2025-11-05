@@ -50,6 +50,8 @@ function [t_list,X_list,h_avg, num_evals,fail_rate] = explicit_RK_variable_step_
         h = h_next;
     end
     h_avg = (t_list(end)-t_list(1))/(length(t_list)-1);
+    n_fail
+    n_attempts
     fail_rate = n_fail / n_attempts;
     fprintf('Step failure rate = %.3f\n', fail_rate);
 end

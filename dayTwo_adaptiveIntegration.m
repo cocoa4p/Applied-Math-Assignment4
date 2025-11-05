@@ -84,7 +84,7 @@ function dayTwo_adaptiveIntegration()
         global_error_adapt(i) = norm(X_list(end,:) - V_true(end,:));
         h_avg_adapt(i) = h_avg;
         num_eval_adapt(i) = num_evals;
-        fail_rate_list = fail_rate;
+        fail_rate_list(i) = fail_rate;
     end
 
     figure(1); clf;
@@ -131,3 +131,6 @@ function dayTwo_adaptiveIntegration()
 
     figure(5); clf;
     semilogx(h_avg_adapt, fail_rate_list, 'co', 'MarkerFaceColor', 'c', 'MarkerSize', 2)
+    xlabel('average step size (log)'); ylabel('failure rate');
+    %legend('Adaptive RK (Dormand–Prince)', 'True solution');
+    title('Failure Rate Over Average Step Size');
