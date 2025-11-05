@@ -53,8 +53,8 @@ function dayTwo_adaptiveIntegration()
     p = 5; 
 
 
-    error_desired_list = logspace(-3, -8, 6);  % adaptive target errors
-    h_fixed_list = logspace(-2.5, -1, 5);      % fixed step reference sizes
+    error_desired_list = logspace(-3, -14, 50);  % adaptive target errors
+    h_fixed_list = logspace(-2.5, 1, 50);      % fixed step reference sizes
 
     global_error_fixed = zeros(size(h_fixed_list));
     h_avg_fixed = zeros(size(h_fixed_list));
@@ -80,10 +80,11 @@ function dayTwo_adaptiveIntegration()
     fprintf('Running adaptive-step integrations...\n');
     for i = 1:length(error_desired_list)
         error_desired = error_desired_list(i);
-        [t_list, X_list, h_avg, num_evals] = explicit_RK_variable_step_integration(my_rate, tspan, V0, 0.05, DormandPrince_embedded, p, error_desired);
+        [t_list, X_list, h_avg, num_evals, fail_rate] = explicit_RK_variable_step_integration(my_rate, tspan, V0, 0.05, DormandPrince_embedded, p, error_desired);
         global_error_adapt(i) = norm(X_list(end,:) - V_true(end,:));
         h_avg_adapt(i) = h_avg;
         num_eval_adapt(i) = num_evals;
+        fail_rate_list = fail_rate;
     end
 
     figure(1); clf;
@@ -127,3 +128,6 @@ function dayTwo_adaptiveIntegration()
     h_list = diff(t_list);
     r_list = sqrt(sum(X_list(1:end-1,1:2).^2, 2));
     semilogx(r_list, h_list, 'ko', 'MarkerFaceColor', 'b', 'MarkerSize', 4);
+
+    figure(5); clf;
+    semilogx(h_avg_adapt, fail_rate_list, 'co', 'MarkerFaceColor', 'c', 'MarkerSize', 2)

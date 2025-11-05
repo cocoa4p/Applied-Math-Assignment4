@@ -17,7 +17,7 @@
 %h_avg: the average step size
 %num_evals: total number of calls made to rate_func_in during the integration
 
-function [t_list,X_list,h_avg, num_evals] = explicit_RK_variable_step_integration ...
+function [t_list,X_list,h_avg, num_evals,fail_rate] = explicit_RK_variable_step_integration ...
 (rate_func_in,tspan,X0,h_ref,BT_struct,p,error_desired)
     t = tspan(1);
     X = X0;
@@ -49,7 +49,7 @@ function [t_list,X_list,h_avg, num_evals] = explicit_RK_variable_step_integratio
         end
         h = h_next;
     end
-    h_avg = mean(diff(t_list));
+    h_avg = (t_list(end)-t_list(1))/(length(t_list)-1);
     fail_rate = n_fail / n_attempts;
     fprintf('Step failure rate = %.3f\n', fail_rate);
 end
