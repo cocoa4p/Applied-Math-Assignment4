@@ -134,3 +134,46 @@ function dayTwo_adaptiveIntegration()
     xlabel('average step size (log)'); ylabel('failure rate');
     %legend('Adaptive RK (Dormand–Prince)', 'True solution');
     title('Failure Rate Over Average Step Size');
+
+
+
+    fprintf('Running adaptive-step integration...\n');
+        error_desired = 1e-8;
+        [t_list, X_list, h_avg, num_evals, fail_rate] = explicit_RK_variable_step_integration(my_rate, tspan, V0, 0.05, DormandPrince_embedded, p, error_desired);
+        %global_error_adapt(i) = norm(X_list(end,:) - V_true(end,:));
+        %h_avg_adapt(i) = h_avg;
+        %num_eval_adapt(i) = num_evals;
+        %fail_rate_list(i) = fail_rate;
+
+
+    % Position vs time
+    figure(6);
+    plot(t_list, X_list(:,1), 'r-','marker', 'o', 'markerfacecolor', 'k', 'markeredgecolor', 'k', 'markersize', 2);
+    xlabel('Time');
+    ylabel('Position');
+    title('Adaptive RK Integration: Position vs Time');
+    
+    % Velocity vs time
+    figure(7);
+    plot(t_list, X_list(:,2), 'r-', 'marker', 'o', ...
+         'markerfacecolor', 'k', ...
+         'markeredgecolor', 'k', ...
+         'markersize', 2);
+    xlabel('Time');
+    ylabel('Velocity');
+    title('Adaptive RK Integration: Velocity vs Time');
+
+
+    % step sizes between adjacent times
+    h_list = diff(t_list);
+    
+    % Compute distances from the Sun (assuming X_list(:,1)=x, X_list(:,2)=y)
+    r_list = sqrt(X_list(1:end-1,1).^2 + X_list(1:end-1,2).^2);
+    
+    % Scatter plot of step size vs distance
+    figure(8);
+    scatter(r_list, h_list, 10, 'filled');
+    xlabel('Distance from Sun, r');
+    ylabel('Step size, h');
+    title('Adaptive RK: Step size vs Distance');
+    grid on;
