@@ -175,5 +175,26 @@ function dayTwo_adaptiveIntegration()
     scatter(r_list, h_list, 10, 'filled');
     xlabel('Distance from Sun, r');
     ylabel('Step size, h');
-    title('Adaptive RK: Step size vs Distance');
+    title('Scatter Plot of Step Size vs Distance');
+    grid on;
+
+    figure(9);
+    loglog(r_list, h_list);
+    xlabel('Distance from Sun, r');
+    ylabel('Step size, h');
+    title('Loglog Plot of Step Size vs Distance');
+    grid on;
+
+    figure(10);
+    semilogx(r_list, h_list);
+    xlabel('Distance from Sun, r');
+    ylabel('Step size, h');
+    title('Semilogx Plot of Step Size vs Distance');
+    grid on;
+
+    figure(11);
+    semilogy(r_list, h_list);
+    xlabel('Distance from Sun, r');
+    ylabel('Step size, h');
+    title('Semilogy Plot of Step Size vs Distance');
     grid on;

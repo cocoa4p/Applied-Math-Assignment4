@@ -23,11 +23,15 @@ function conservation_experiment()
    % X_true = sol(tf);   
 
     forEu = @forward_euler_fixed_step_integration;
+    forMid = @explicit_midpoint_fixed_step_integration;
 
     h_step = logspace(-5, -0.1, 50); 
 
     errs_FE  = zeros(size(h_step));
     nfe_FE   = zeros(size(h_step));
+
+    errs_M  = zeros(size(h_step));
+    nfe_M  = zeros(size(h_step));
 
     % Step Size Loop
     for r = 1:length(h_step)
@@ -35,6 +39,7 @@ function conservation_experiment()
 
         % Forward Euler
         [t_FE, X_FE, h_avg_FE, num_evals_FE] = forEu(rate, [t0 tf], X0, h);
+        [t_M, X_M, h_avg_M, num_evals_M] = forMid(rate, [t0 tf], X0, h);
         %X_FE_final = X_FE(end,:)';
 
         %errs_FE(r) = norm(X_FE_final - X_true);
@@ -42,21 +47,35 @@ function conservation_experiment()
 
         % Energy tracking
         E_values = zeros(size(t_FE));
+        E_valuesM = zeros(size(t_M));
+
         for i = 1:length(t_FE)
             E_values(i) = calc_mech_energy(orbit_params, X_FE(i,:)');
         end
+
+         for i = 1:length(t_M)
+           
+            E_valuesM(i) = calc_mech_energy(orbit_params, X_M(i,:)');
+         end 
+
+
         E0 = E_values(1);
+        E1 = E_valuesM(1);
         rel_error = abs(E_values - E0) / abs(E0);
+        rel_error1 = abs(E_valuesM - E1) / abs(E1);
 
         % Record max relative energy deviation
         errs_FE(r) = max(rel_error);
         nfe_FE(r) = num_evals_FE;
+        errs_M(r) = max(rel_error1);
+        nfe_M(r) = num_evals_M;
 
     end
 
     % Plot energy conservation vs step size
     figure(1); clf
     loglog(h_step, errs_FE,  'ro', 'MarkerFaceColor','r', 'MarkerSize',2); hold on
+    loglog(h_step, errs_M,  'mo', 'MarkerFaceColor','m', 'MarkerSize',2); hold on
 
     %filter_params = struct();
     %filter_params.max_xval = 1;
@@ -68,15 +87,17 @@ function conservation_experiment()
 
     xlabel('step size h');
     ylabel('Max relative energy error');
-    title('Energy Conservation vs Step Size (Forward Euler)');
+    title('Energy Conservation vs Step Size');
 
     % Optionally fit slope on log-log plot
     filter_params = struct();
     filter_params.max_xval = 1;
     [p_FE, k_FE] = loglog_fit(h_step, errs_FE, filter_params);
+    [p_M, k_M] = loglog_fit(h_step, errs_M, filter_params);
 
     loglog(h_step, k_FE*h_step.^p_FE, 'r--', 'LineWidth', 1);
-    legend(sprintf('Forward Euler (p = %.2f)', p_FE), 'Location','southwest');
+    loglog(h_step, k_M*h_step.^p_M, 'm--', 'LineWidth', 1);
+    legend('Forward Euler', 'Midpoint', 'Location','southwest');
 end
 
 

@@ -112,9 +112,9 @@ function dayTwo_Local()
     loglog(diff_list, tr_error_list1, 'mo', 'MarkerFaceColor', 'm', 'MarkerSize', 2); hold on;
     loglog(diff_list, tr_error_list2, 'co', 'MarkerFaceColor', 'c', 'MarkerSize', 2);
 
-    title('Scaling of Local Truncation Error with Step Size')
+    title('Scaling of Local Truncation Error with Difference between XB1 and XB2')
     xlabel('Difference between XB1 and XB2')
-    ylabel('Error magnitude')
+    ylabel('Truncation Error')
     my_legend = legend('Local truncation error XB1', 'Local truncation error XB2');
     set(my_legend,'location','southeast')
     
